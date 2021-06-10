@@ -1,3 +1,0 @@
-GeneratorExit
-
-input
