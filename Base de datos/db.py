@@ -1,13 +1,19 @@
 # Agenda con base de datos Sqlite3
 import pymysql
 
+#Defino mis variables
+host='localhost'  #127.0.0.1
+user='root'  #admin o cualquier otro usuario
+password='toor'
+name_db='aesiq'
+
 def create_db():
     '''Creación de la Base de datos'''
 
-    conexion = pymysql.connect(host='localhost', #127.0.0.1
-                                user='root',      #admin o cualquier otro usuario
-                                password='toor',
-                                db='aesiq')
+    conexion = pymysql.connect(host, 
+                                user,      
+                                password,
+                                name_db)
     consulta = conexion.cursor()
     sql = 'CREATE TABLE IF NOT EXISTS contactos(id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, nombre VARCHAR(20) NOT NULL, apellidos VARCHAR(20) NOT NULL, telefono VARCHAR(14) NOT NULL, email VARCHAR(20) NOT NULL)'
     try:
@@ -22,10 +28,10 @@ def connect():
     '''Conexión a la Base de datos'''
 
     try:
-        conexion = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
+        conexion = pymysql.connect(host, 
+                            user,      
+                            password,
+                            name_db)
         print("Conexión correcta")
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Ocurrió un error al conectar: ", e)
@@ -34,10 +40,10 @@ def connect():
 def insert_data(nombre, apellidos, telefono, email):
     '''Agregar datos en la Base de Datos'''
 
-    conexion = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                db='agenda')
+    conexion = pymysql.connect(host, 
+                                user,      
+                                password,
+                                name_db)
 
     consulta = conexion.cursor()
 
@@ -68,10 +74,10 @@ def update_data(nombre, apellidos, telefono, email, nom_buscado):
 def delete_data(nombre, apellidos, telefono, email, nom_buscado):
     '''Eliminar datos en la Base de Datos'''
     # Falta Try-Except
-    conexion = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                db='agenda')
+    conexion = pymysql.connect(host, 
+                                user,      
+                                password,
+                                name_db)
     consulta = conexion.cursor()
     consulta.execute('DELETE FROM contactos WHERE nombre= %s',nom_buscado)
     consulta.close()
@@ -80,13 +86,13 @@ def delete_data(nombre, apellidos, telefono, email, nom_buscado):
 
 def get_all_data():
     try:
-        connection = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
+        conexion = pymysql.connect(host, 
+                                user,      
+                                password,
+                                name_db)
 
         sql_select_Query = "select * from contactos"
-        cursor = connection.cursor()
+        cursor = conexion.cursor()
         cursor.execute(sql_select_Query)
         records = cursor.fetchall()
 
@@ -99,17 +105,17 @@ def get_all_data():
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Error reading data from MySQL table", e)
     finally:
-        connection.close()
+        conexion.close()
         cursor.close()
         print("MySQL connection is closed")
 
 def get_data(nombre):
     '''Buscar un solo valor en la Base de Datos'''
     try:
-        conexion = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
+        conexion = pymysql.connect(host, 
+                                user,      
+                                password,
+                                name_db)
         try:
             #cursor=conexion.cursor()
             with conexion.cursor() as cursor:
