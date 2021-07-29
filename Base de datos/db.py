@@ -7,13 +7,9 @@ user='root'  #admin o cualquier otro usuario
 password='toor'
 name_db='aesiq'
 
-def create_db():
+def create_db(host,user,password,name_db):
     '''Creación de la Base de datos'''
-
-    conexion = pymysql.connect(host, 
-                                user,      
-                                password,
-                                name_db)
+    conexion = pymysql.connect(host,user,password,name_db)
     consulta = conexion.cursor()
     sql = 'CREATE TABLE IF NOT EXISTS contactos(id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, nombre VARCHAR(20) NOT NULL, apellidos VARCHAR(20) NOT NULL, telefono VARCHAR(14) NOT NULL, email VARCHAR(20) NOT NULL)'
     try:
@@ -129,3 +125,9 @@ def get_data(nombre):
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Error consultando la tabla:", e)
 
+def run():
+    create_db()
+
+
+if __name__=='__main__':
+    run()
