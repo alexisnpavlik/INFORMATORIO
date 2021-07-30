@@ -31,12 +31,8 @@ def create_db():
 
 def insert_data(nombre, apellidos, telefono, email):
     '''Agregar datos en la Base de Datos'''
-
-    conexion = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                db='agenda')
-
+    
+    connect()
     consulta = conexion.cursor()
 
     datos = (nombre, apellidos, telefono, email)
@@ -52,11 +48,7 @@ def insert_data(nombre, apellidos, telefono, email):
 
 def update_data(nombre, apellidos, telefono, email, nom_buscado):
     '''Actualizar datos en la Base de Datos'''
-    # Falta Try-Except
-    conexion = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                db='agenda')
+    connect()
     consulta = conexion.cursor()
     consulta.execute('UPDATE contactos SET nombre = %s ,apellidos = %s,telefono = %s,email = %s WHERE nombre= %s',nom_buscado)
     consulta.close()
@@ -65,11 +57,7 @@ def update_data(nombre, apellidos, telefono, email, nom_buscado):
 
 def delete_data(nombre, apellidos, telefono, email, nom_buscado):
     '''Eliminar datos en la Base de Datos'''
-    # Falta Try-Except
-    conexion = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                db='agenda')
+    connect()
     consulta = conexion.cursor()
     consulta.execute('DELETE FROM contactos WHERE nombre= %s',nom_buscado)
     consulta.close()
@@ -78,13 +66,9 @@ def delete_data(nombre, apellidos, telefono, email, nom_buscado):
 
 def get_all_data():
     try:
-        connection = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
-
+        connect()
         sql_select_Query = "select * from contactos"
-        cursor = connection.cursor()
+        cursor = conexion.cursor()
         cursor.execute(sql_select_Query)
         records = cursor.fetchall()
 
@@ -97,17 +81,14 @@ def get_all_data():
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Error reading data from MySQL table", e)
     finally:
-        connection.close()
+        conexion.close()
         cursor.close()
         print("MySQL connection is closed")
 
 def get_data(nombre):
     '''Buscar un solo valor en la Base de Datos'''
     try:
-        conexion = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
+        connect()
         try:
             #cursor=conexion.cursor()
             with conexion.cursor() as cursor:
@@ -120,11 +101,3 @@ def get_data(nombre):
             conexion.close()
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Error consultando la tabla:", e)
-
-
-def run():
-    create_db()
-
-
-if __name__=='__main__':
-    run()
