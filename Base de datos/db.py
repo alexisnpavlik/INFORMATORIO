@@ -1,13 +1,20 @@
-# Agenda con base de datos Sqlite3
 import pymysql
+
+def connect():
+    '''Conexión a la Base de datos'''
+    global conexion
+    try:
+        conexion = pymysql.connect(host='localhost', #127.0.0.1
+                                    user='root',    #admin o cualquier otro usuario
+                                    password='toor',
+                                    db='aesiq')
+        print("Conexión correcta")
+    except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+        print("Ocurrió un error al conectar: ", e)
 
 def create_db():
     '''Creación de la Base de datos'''
-
-    conexion = pymysql.connect(host='localhost', #127.0.0.1
-                                user='root',      #admin o cualquier otro usuario
-                                password='',
-                                db='agenda')
+    connect()
     consulta = conexion.cursor()
     sql = 'CREATE TABLE IF NOT EXISTS contactos(id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, nombre VARCHAR(20) NOT NULL, apellidos VARCHAR(20) NOT NULL, telefono VARCHAR(14) NOT NULL, email VARCHAR(20) NOT NULL)'
     try:
@@ -15,17 +22,8 @@ def create_db():
         print('La tabla fue creada con éxito')
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("No se pudo crear la tabla: ", e)
-    conexion.close()
+        conexion.close()
 
-
-def connect():
-    '''Conexión a la Base de datos'''
-
-    try:
-        conexion = pymysql.connect(host='localhost',
-                                    user='root',
-                                    password='',
-                                    db='agenda')
         print("Conexión correcta")
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Ocurrió un error al conectar: ", e)
@@ -122,3 +120,11 @@ def get_data(nombre):
             conexion.close()
     except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
         print("Error consultando la tabla:", e)
+
+
+def run():
+    create_db()
+
+
+if __name__=='__main__':
+    run()
